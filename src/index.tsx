@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import App from './App';
-import { darkTheme } from './theme';
+import { RecoilRoot } from 'recoil';
+import { darkTheme, lightTheme } from './theme';
 
 const GlobalStyle = createGlobalStyle`
 body{
@@ -21,10 +22,10 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <ThemeProvider theme={darkTheme}>
+  <RecoilRoot>
+    <ThemeProvider theme={lightTheme}>
       <GlobalStyle />
       <App />
     </ThemeProvider>
-  </React.StrictMode>
+  </RecoilRoot>
 );
