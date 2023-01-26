@@ -11,7 +11,7 @@ body{
 }
 *{margin: 0; padding: 0; box-sizing:border-box; color:${({ theme }) =>
   theme.textColor};
-font-family  :${({ theme }) => theme.fontFamilly} ;
+font-family  :${({ theme }) => theme.fontFamilly};
 }
 li{list-style: none;}
 a{color:inherit; text-decoration: none;}
@@ -23,7 +23,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <RecoilRoot>
-    <ThemeProvider theme={lightTheme}>
+    <ThemeProvider theme={darkTheme}>
       <GlobalStyle />
       <App />
     </ThemeProvider>
