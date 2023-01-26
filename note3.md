@@ -74,5 +74,3 @@ sourceBoard와 destinationBoard를 선언해주자.
       });
     }
 ```
-
-## 7.11 Droppable Snapshot
