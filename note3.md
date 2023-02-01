@@ -76,3 +76,125 @@ sourceBoard와 destinationBoard를 선언해주자.
 ```
 
 ## 7.11 Droppable Snapshot
+
+카드를 움직일때 효과를 줘보자. 보드를 떠나는지 넣는지에 따라 색상 효과를 줘보자.
+
+```JavaScript
+<Droppable droppableId={boardId}>
+        {(magic, snapshot) => (
+          <Area {...magic.droppableProps} ref={magic.innerRef}>
+            {todos.map((val, idx) => (
+              <DraggableCard todo={val} idx={idx} />
+            ))}
+            {magic.placeholder}
+          </Area>
+        )}
+      </Droppable>
+```
+
+두번째 arg는 isDraggingOver, draggingFromThisWith등에 대한 boolean을 제공한다. Area에게 prop으로 제공하자.
+
+```JavaScript
+const Area = styled.div<{ isDraggingOver: boolean }>`
+  background-color: ${(props) => (props.isDraggingOver ? 'pink' : 'blue')};
+  flex-grow: 1;
+`;
+interface IBoardProps {
+  todos: string[];
+  boardId: string;
+}
+
+const Board = ({ todos, boardId }: IBoardProps) => {
+  return (
+    <Wrapper>
+      <h2>{boardId}</h2>
+      <Droppable droppableId={boardId}>
+        {(magic, snapshot) => (
+          <Area
+            {...magic.droppableProps}
+            ref={magic.innerRef}
+            isDraggingOver={snapshot.isDraggingOver}
+          >
+            {todos.map((val, idx) => (
+              <DraggableCard todo={val} idx={idx} />
+            ))}
+            {magic.placeholder}
+          </Area>
+        )}
+      </Droppable>
+    </Wrapper>
+  );
+};
+
+```
+
+이제 드래그해서 위로 올리면 Area의 색이 변한다. draggingFromThisWith도 추가해주자.
+
+```JavaScript
+interface IArea {
+  isDraggingOver: boolean;
+  draggingFromThisWith: boolean;
+}
+
+const Area = styled.div<IArea>`
+  background-color: ${(props) =>
+    props.isDraggingOver
+      ? 'pink'
+      : props.draggingFromThisWith
+      ? 'tomato'
+      : 'blue'};
+  flex-grow: 1;
+`;
+.
+.
+.
+          <Area
+            {...magic.droppableProps}
+            ref={magic.innerRef}
+            isDraggingOver={snapshot.isDraggingOver}
+            draggingFromThisWith={Boolean(snapshot.draggingFromThisWith)}
+          >
+```
+
+## 7.12 Final Styles
+
+카드에도 스타일을 주자.
+
+```JavaScript
+const Card = styled.div<{
+  isDragging: boolean;
+}>`
+  background-color: ${(props) =>
+    props.isDragging ? 'beige' : props.theme.cardColor};
+  border-radius: 5px;
+  padding: 10px 10px;
+  margin-bottom: 20px;
+  box-shadow: inset -3px -3px 12px 0px #1b034f82;
+`;
+interface IDraggableProps {
+  todo: string;
+  idx: number;
+}
+
+const DraggableCard = ({ todo, idx }: IDraggableProps) => {
+  console.log(todo, 'is rerendered');
+  return (
+    <Draggable
+      draggableId={todo.slice(0, 3)}
+      index={idx}
+      key={todo.slice(0, 3)}
+    >
+      {(magic, snapshot) => (
+        <Card
+          isDragging={snapshot.isDragging}
+          ref={magic.innerRef}
+          {...magic.dragHandleProps}
+          {...magic.draggableProps}
+        >
+          {todo}
+        </Card>
+      )}
+    </Draggable>
+  );
+};
+```
